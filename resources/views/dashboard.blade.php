@@ -31,11 +31,8 @@
 						</div>
 
 						<div class="interaction">
-							<a class="unlike" role="button" style="{{(!$post['is_liked'])? "display: none" : "" }}">
-							Unlike
-							</a>
-							<a class="like" role="button" style="{{($post['is_liked'])? "display: none" : "" }}">
-							Like
+							<a class="like" role="button">
+							{{ ($post['is_liked']) ? 'Unlike' : 'Like' }}
 							</a>
 							@if(auth()->user()->id == $post['user_id'])
 								|

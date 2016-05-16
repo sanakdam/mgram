@@ -12,10 +12,9 @@ class CreateLikesTable extends Migration {
 	public function up() {
 		Schema::create('likes', function (Blueprint $table) {
 			$table->increments('id');
-			$table->timestamps();
 			$table->integer('user_id');
 			$table->integer('post_id');
-			$table->boolean('like');
+			$table->timestamps();
 		});
 	}
 
