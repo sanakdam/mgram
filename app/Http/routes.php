@@ -70,12 +70,7 @@ Route::group(['middleware' => ['web']], function () {
 	]);
 
 	Route::post('/like', [
-		'uses' => 'PostController@postLikePost',
+		'uses' => 'PostController@toggleLike',
 		'as' => 'like',
-	]);
-
-	Route::post('/unlike', [
-		'uses' => 'PostController@postUnlikePost',
-		'as' => 'unlike',
 	]);
 });

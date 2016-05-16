@@ -36,28 +36,6 @@ $('.like').on('click', function (event) {
 	 	var parse = JSON.parse(response);
 	 	var element = event.target.parentNode.parentNode;
 	 	$(element).find('.info').find('.like_count').html(parse.like_count + " Like");
-
-	 	$(element).find('.interaction').find('.like').hide();
-	 	$(element).find('.interaction').find('.unlike').show();
+         $('.like').text(parse.action_text);
 	 });
 });
-
-$('.unlike').on('click', function (event) {
-	event.preventDefault();
-	postId = event.target.parentNode.parentNode.dataset['postid'];
-	 $.ajax({
-	 	method: 'POST',
-	 	url: urlUnlike,
-	 	data: {postId: postId, _token: token}
-	 })
-	 .done(function (response) {
-
-	 	var parse = JSON.parse(response);
-	 	var element = event.target.parentNode.parentNode;
-	 	$(element).find('.info').find('.like_count').html(parse.like_count + " Like");
-
-	 	$(element).find('.interaction').find('.like').show();
-	 	$(element).find('.interaction').find('.unlike').hide();
-	 });
-});
-

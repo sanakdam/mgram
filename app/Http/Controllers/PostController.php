@@ -27,9 +27,9 @@ class PostController extends Controller {
 				'body' => $post->body,
 				'username' => $post->user->username,
 				'created_at' => $post->created_at,
-				'is_liked' => $post->is_liked(),
+				'is_liked' => $post->isLiked(),
 				'user_id' => $post->user_id,
-				'like_count' => $post->like_count(),
+				'like_count' => $post->likes()->count(),
 			];
 		});
 		return view('dashboard', ['posts' => $posts]);
@@ -54,38 +54,23 @@ class PostController extends Controller {
 		return response()->json(['new_body' => $post->body], 200);
 	}
 
-	public function postLikePost(Request $request) {
-		$post_id = $request['postId'];
-		$post = Post::find($post_id);
+    public function toggleLike(Request $request)
+    {
+        $post = Post::find($request->get('postId'));
 
-		if ($post->is_liked()) {
-			return null;
-		}
+        $action = 'Liked';
+        if ($post->isLiked()) {
+            $post->likes()->detach(auth()->user()->id);
+        } else {
+            $post->likes()->attach(auth()->user()->id);
+            $action = 'Unlike';
+        }
 
-		$like = Like::Create([
-			'post_id' => $post_id,
-			'user_id' => auth()->user()->id,
-			'like' => '1',
-		]);
-
-		$post = Post::find($post_id);
-
-		return json_encode(['like_count' => $post->like_count()]);
-	}
-
-	public function postUnlikePost(Request $request) {
-		$post_id = $request['postId'];
-
-		$like = Like::where('post_id', $post_id)
-			->where('user_id', auth()->user()->id)
-			->first();
-
-		$like->delete();
-
-		$post = Post::find($like->post_id);
-
-		return json_encode(['like_count' => $post->like_count()]);
-	}
+        return json_encode([
+            'like_count' => $post->likes()->count(),
+            'action_text' => $action,
+        ]);
+    }
 
 }
 ?>
