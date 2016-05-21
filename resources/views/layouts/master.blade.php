@@ -11,6 +11,8 @@
 	<link rel="stylesheet" href="{{ url('src/css/bootstrap-theme.min.css') }}" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
 	<link rel="stylesheet" type="text/css" href="{{ url('src/css/main.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url('src/css/font-awesome.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url('src/css/prettyPhoto.css') }}">
 </head>
 <body style="background-color: #EAEAEA;">
 	@include('includes.header')
@@ -29,5 +31,8 @@
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="{{ URL::to('src/js/bootstrap.min.js') }}" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="{{ URL::to('src/js/app.js') }}"></script>
+
+    <!-- PRETTYPHOTO  SCRIPTS  LIBRARY-->
+    <script src="{{ URL::to('src/jquery.prettyPhoto.js') }}"></script>
 </body>
 </html>

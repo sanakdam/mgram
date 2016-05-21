@@ -14,6 +14,10 @@ class User extends Model implements Authenticatable {
 		'username',
 		'email',
 		'password',
+		'full_name',
+		'birth_date',
+		'site',
+		'bio',
 	];
 
 	public function posts() {
@@ -22,5 +26,9 @@ class User extends Model implements Authenticatable {
 
 	public function likes() {
 		return $this->belongsToMany(Post::class, 'likes');
+	}
+
+	public function comment() {
+		return $this->hasMany('App\Comment');
 	}
 }

@@ -9,8 +9,16 @@
 			<header><h3>Your Account</h3></header>
 			<form action="{{ route('account.save') }}" method="post" enctype="multipart/form-data">
 				<div class="form-group">
-					<label for="username">Username</label>
-					<input type="text" name="username" class="form-control" value="{{ $user->username }}" id="username">
+					<input type="text" name="username" class="form-control" id="username" placeholder="Username" value="{{ $user->username }}">
+				</div>
+				<div class="form-group">
+					<input type="text" name="full_name" class="form-control" id="full_name" placeholder="Full name" value="{{ $user->full_name }}">
+				</div>
+				<div class="form-group">
+					<input type="text" name="site" class="form-control" id="site" placeholder="Sites" value="{{ $user->site }}">
+				</div>
+				<div class="form-group">
+					<input type="text" name="bio" class="form-control" id="bio" placeholder="Your bio" value="{{ $user->bio }}">
 				</div>
 				<div class="form-group">
 					<label for="image">Image (only.jpg)</label>
@@ -21,11 +29,17 @@
 			</form>
 	</section>
 
-	@if(Storage::disk('local')->has($user->username . '-' . $user->id . '.jpg'))
-		<section class="row new-post">
-			<div class="col-md-6 col-md-offset-3">
-				<img src="/uploads/{{ $user->username . '-' . $user->id . '.jpg' }}" alt="" class="img-responsive">
-			</div>
-		</section>
-	@endif
+		<div class="text-center">
+			<br>
+			@if(file_exists(public_path() . "/uploads/" . $user->username . '-' .  $user->id . '.jpg') == null)
+	            <img style="width: 300px; height: 300px;" class="img-responsive img-thumbnail img-circle" src="/uploads/nobody.jpg" alt="">
+	        @else
+				<img style="width: 300px; height: 300px;" class="img-responsive img-thumbnail img-circle" src="/uploads/{{ $user->username . '-' . $user->id . '.jpg' }}" alt="">
+	        @endif
+
+
+	        		<h1>{{ $user->full_name }}</h1>
+		        	<h4><a style="color: #CE433F;" href="{{ $user->site }}"> {{ $user->site }} </a></h4>
+		        	<h4>{{ $user->bio }}</h4>
+		</div>
 @endsection

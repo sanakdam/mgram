@@ -1,7 +1,6 @@
 <?php
 
 namespace App;
-use App\Like;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model {
@@ -15,5 +14,9 @@ class Post extends Model {
 
 	public function isLiked() {
 		return (boolean) $this->likes()->where('user_id', auth()->user()->id)->count();
+	}
+
+	public function comment() {
+		return $this->hasMany('App\Comment');
 	}
 }

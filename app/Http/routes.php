@@ -73,4 +73,9 @@ Route::group(['middleware' => ['web']], function () {
 		'uses' => 'PostController@toggleLike',
 		'as' => 'like',
 	]);
+
+	Route::post('/comment', [
+		'use' => 'PostController@postCommentPost',
+		'as' => 'comment.create',
+	]);
 });

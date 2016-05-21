@@ -1,7 +1,8 @@
 <?php
 namespace App\Http\Controllers;
-use App\Like;
+use App\Comment;
 use App\Post;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,11 +29,23 @@ class PostController extends Controller {
 				'username' => $post->user->username,
 				'created_at' => $post->created_at,
 				'is_liked' => $post->isLiked(),
+				'comment_body' => $post->comment(),
 				'user_id' => $post->user_id,
 				'like_count' => $post->likes()->count(),
 			];
 		});
-		return view('dashboard', ['posts' => $posts]);
+
+		$listcomment = Comment::orderBy('created_at', 'asc')->get();
+		$comments = $listcomment->map(function ($comment) {
+			return [
+				'id' => $comment->id,
+				'comment_body' => $comment->comment_body,
+				'user_id' => $comment->user_id,
+				'post_id' => $comment->post_id,
+				'created_at' => $comment->created_at,
+			];
+		});
+		return view('dashboard', ['posts' => $posts, 'comments' => $comments]);
 	}
 
 	public function getDeletePost($post_id) {
@@ -54,23 +67,34 @@ class PostController extends Controller {
 		return response()->json(['new_body' => $post->body], 200);
 	}
 
-    public function toggleLike(Request $request)
-    {
-        $post = Post::find($request->get('postId'));
+	public function toggleLike(Request $request) {
+		$post = Post::find($request->get('postId'));
 
-        $action = 'Liked';
-        if ($post->isLiked()) {
-            $post->likes()->detach(auth()->user()->id);
-        } else {
-            $post->likes()->attach(auth()->user()->id);
-            $action = 'Unlike';
-        }
+		$action = 'Like';
+		if ($post->isLiked()) {
+			$post->likes()->detach(auth()->user()->id);
+		} else {
+			$post->likes()->attach(auth()->user()->id);
+			$action = 'Unlike';
+		}
 
-        return json_encode([
-            'like_count' => $post->likes()->count(),
-            'action_text' => $action,
-        ]);
-    }
+		return json_encode([
+			'like_count' => $post->likes()->count(),
+			'action_text' => $action,
+		]);
+	}
 
+	public function postCommentPost(Request $request) {
+		$this->validate($request, [
+			'comment_body' => 'required',
+		]);
+
+		$comment = Comment::create([
+			'post_id' => $request->get('postId'),
+			'comment_body' => $request->get('comment_body'),
+			'user_id' => auth()->user()->id,
+		]);
+		return redirect()->route('dashboard');
+	}
 }
 ?>

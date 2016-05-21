@@ -30,7 +30,7 @@ class UserController extends Controller {
 		]);
 
 		Auth::login($user);
-		return redirect()->route('dashboard');
+		return redirect()->route('account');
 	}
 
 	public function postSignIn(Request $request) {
@@ -57,17 +57,20 @@ class UserController extends Controller {
 
 	public function postSaveAccount(Request $request) {
 		$this->validate($request, [
-			'username' => 'required|max:120',
+			'full_name' => 'max:120',
+			'site' => 'max:120',
+			'bio' => 'max:120',
 		]);
 
 		$user = Auth::user();
-		$user->username = $request['username'];
-		$user->update();
-		$file = $request->file('image');
-		$filename = $request['username'] . '-' . $user->id . '.jpg';
+		$user->update($request->toArray());
 
-		if ($file) {
+		if ($request->hasFile('image')) {
+			$file = $request->file('image');
+			$filename = $user->username . '-' . $user->id . '.jpg';
+
 			$file->move('uploads', $filename);
+
 		}
 		return redirect()->route('account');
 	}
