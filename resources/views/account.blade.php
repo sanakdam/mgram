@@ -14,6 +14,9 @@
 				<div class="form-group">
 					<input type="text" name="full_name" class="form-control" id="full_name" placeholder="Full name" value="{{ $user->full_name }}">
 				</div>
+				 <div class="form-group">
+			        <input type="date" class="form-control" id="birth_date" name="birth_date" placeholder="Date of Birth" value="{{ $user->birth_date }}">
+			    </div>
 				<div class="form-group">
 					<input type="text" name="site" class="form-control" id="site" placeholder="Sites" value="{{ $user->site }}">
 				</div>
@@ -39,6 +42,7 @@
 
 
 	        		<h1>{{ $user->full_name }}</h1>
+	        		<h4>{{ $user->birth_date }}</h4>
 		        	<h4><a style="color: #CE433F;" href="{{ $user->site }}"> {{ $user->site }} </a></h4>
 		        	<h4>{{ $user->bio }}</h4>
 		</div>

@@ -37,6 +37,12 @@ Route::group(['middleware' => ['web']], function () {
 		'middleware' => 'auth',
 	]);
 
+	Route::get('/admin', [
+		'uses' => 'PostController@getAdminDashboard',
+		'as' => 'admin',
+		'middleware' => 'auth',
+	]);
+
 	Route::get('/account', [
 		'uses' => 'UserController@getAccount',
 		'as' => 'account',

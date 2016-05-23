@@ -10,10 +10,11 @@
 	<div>
 		  <!-- Nav tabs -->
 		  <ul class="nav nav-tabs nav-justified" role="tablist">
-		    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab"><img width="20px" height="20px" src="/src/icons/reload.png"></a></li>
+		    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab"><img width="20px" height="20px" src="/src/icons/house.png"></a></li>
 		    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><img width="20px" height="20px" src="/src/icons/avatar.png"></a></li>
+		    <li role="presentation"><a href="#uploads" aria-controls="uploads" role="tab" data-toggle="tab"><img width="20px" height="20px" src="/src/icons/upload.png"></a></li>
 		    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab"><img width="20px" height="20px" src="/src/icons/chat-1.png"></a></li>
-		    <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab"><img width="20px" height="20px" src="/src/icons/settings.png"></a></li>
+		    <li role="presentation"><a href="#heart" aria-controls="heart" role="tab" data-toggle="tab"><img width="20px" height="20px" src="/src/icons/heart.png"></a></li>
 		  </ul>
 
 		  <!-- Tab panes -->
@@ -22,7 +23,7 @@
 		    	<section class="new-post">
 					<form action="{{ route('post.create') }}" method="post">
 						<div class="form-group">
-							<textarea class="form-control" name="body" id="new-post" rows="3" placeholder="Your Post"></textarea>
+							<textarea style="border-radius: 0px;" class="form-control" name="body" id="new-post" rows="3" placeholder="Your Post"></textarea>
 						</div>
 						<button type="submit" class="btn btn-danger">Create Post</button>
 						<input type="hidden" name="_token" value="{{ Session::token() }}">
@@ -34,8 +35,8 @@
 							@foreach($posts as $post)
 								<article style="padding-bottom: 5px;" class="panel panel-danger post" data-postid="{{ $post['id'] }}">
 									<header style="padding-top: 10px;">
-										@if(file_exists(public_path() . "/uploads/" . auth()->user()->username . '-' .  auth()->user()->id . '.jpg') == null)
-											<img stylze="width: 30px; height: 30px; float: left;" class="img-responsive img-circle" src="/uploads/nobody.jpg" alt="">
+										@if(file_exists(public_path() . "/uploads/" . $post['username'] . '-' .  $post['user_id'] . '.jpg') == null)
+											<img style="width: 30px; height: 30px; float: left;" class="img-responsive img-circle" src="/uploads/nobody.jpg" alt="">
 										@else
 				                        	<img style="width: 30px; height: 30px; float: left;" class="img-responsive img-circle" src="/uploads/{{ $post['username'] . '-' . $post['user_id'] . '.jpg' }}" alt="">
 				                        @endif
@@ -47,11 +48,10 @@
 
 										<p class="like_count">{{$post['like_count']}} Like</p>
 										Posted by {{$post['username']}} on {{$post['created_at']}}
-										<i class="glyphicon glyphicon-pencil"></i>
 									</div>
 
 									<div class="interaction">
-										<a class="like" role="button">
+										<a style="color: #CE433F" class="like" role="button">
 										{{ ($post['is_liked']) ? 'Unlike' : 'Like' }}
 										</a>
 										@if(auth()->user()->id == $post['user_id'])
@@ -105,16 +105,28 @@
                         	<img style="width: 300px; height: 300px;" class="img-responsive img-thumbnail img-circle" src="/uploads/{{ auth()->user()->username . '-' . auth()->user()->id . '.jpg' }}" alt="">
                         @endif
                     </p>
-                    <h3>{{ auth()->user()->username }}</h3>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec enim sapien. Aliquam erat volutpat.
-                    </p>
+                    <h1>{{ auth()->user()->full_name }}</h1>
+                    <h4>{{ auth()->user()->birth_date }}</h4>
+		        	<h4><a style="color: #CE433F;" href="{{ auth()->user()->site }}"> {{ auth()->user()->site }} </a></h4>
+		        	<h4>{{ auth()->user()->bio }}</h4>
                 </div>
 		    </div>
 
-
-		    <div role="tabpanel" class="tab-pane" id="messages">...</div>
-		    <div role="tabpanel" class="tab-pane" id="settings">...</div>
+		    <div role="tabpanel" class="tab-pane" id="uploads">
+		    	<label class="control-label">Select File</label>
+				<input id="input-4" name="input4[]" type="file" multiple class="file-loading">
+				<script>
+				$(document).on('ready', function() {
+				    $("#input-4").fileinput({showCaption: false});
+				});
+				</script>
+		    </div>
+		    <div role="tabpanel" class="tab-pane" id="messages">
+		    	Report + message
+		    </div>
+		    <div role="tabpanel" class="tab-pane" id="heart">
+		    	Menampilkan siapa saja yang ngelike postingan
+		    </div>
 		  </div>
 
 	</div>

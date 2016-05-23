@@ -17,6 +17,15 @@ class PostController extends Controller {
 		if ($request->user()->posts()->save($post)) {
 			$message = 'Post successfully created';
 		}
+
+		if ($request->hasFile('image')) {
+			$file = $request->file('image');
+			$filename = $post->user()->username . '-' . $post->id . '.jpg';
+
+			$file->move('posts', $filename);
+
+		}
+
 		return redirect()->route('dashboard')->with(['message' => $message]);
 	}
 
@@ -46,6 +55,10 @@ class PostController extends Controller {
 			];
 		});
 		return view('dashboard', ['posts' => $posts, 'comments' => $comments]);
+	}
+
+	public function getAdminDashboard() {
+		return view('adminDashboard');
 	}
 
 	public function getDeletePost($post_id) {
