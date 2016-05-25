@@ -38,7 +38,7 @@ class PostController extends Controller {
 				'username' => $post->user->username,
 				'created_at' => $post->created_at,
 				'is_liked' => $post->isLiked(),
-				'comment_body' => $post->comment(),
+				'comment_body' => $post->comments(),
 				'user_id' => $post->user_id,
 				'like_count' => $post->likes()->count(),
 			];

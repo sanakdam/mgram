@@ -16,7 +16,7 @@ class Post extends Model {
 		return (boolean) $this->likes()->where('user_id', auth()->user()->id)->count();
 	}
 
-	public function comment() {
+	public function comments() {
 		return $this->hasMany('App\Comment');
 	}
 }
