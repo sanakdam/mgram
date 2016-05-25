@@ -53,7 +53,7 @@ class UserController extends Controller {
 		return view('account', ['user' => Auth::user()]);
 	}
 
-	public function getUserImage() {
+	public function getUserImage($filename) {
 		$file = Storage::disk('local')->get($filename);
 		return new Response($file, 200);
 	}
