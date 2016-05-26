@@ -85,7 +85,11 @@ Route::group(['middleware' => ['web']], function () {
 		'as' => 'comment.create',
 	]);
 
-	Route::get('profile/{username}', 'ProfileController@index');
+	Route::get('profile/{username}', [
+		'uses' => 'ProfileController@index',
+		'as' => 'profile',
+		'middleware' => 'auth',
+	]);
 
 	Route::get('follow/{id}', 'ProfileController@follow');
 });

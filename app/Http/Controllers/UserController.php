@@ -71,7 +71,6 @@ class UserController extends Controller {
 		if ($request->hasFile('image')) {
 			$file = $request->file('image');
 			$filename = $user->username . '-' . $user->id . '.jpg';
-
 			$file->move('uploads', $filename);
 
 		}

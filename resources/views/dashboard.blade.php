@@ -11,7 +11,6 @@
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs nav-justified" role="tablist">
 			<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab"><img width="20px" height="20px" src="/src/icons/house.png"></a></li>
-			<li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><img width="20px" height="20px" src="/src/icons/avatar.png"></a></li>
 			<li role="presentation"><a href="#uploads" aria-controls="uploads" role="tab" data-toggle="tab"><img width="20px" height="20px" src="/src/icons/upload.png"></a></li>
 			<li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab"><img width="20px" height="20px" src="/src/icons/chat-1.png"></a></li>
 			<li role="presentation"><a href="#heart" aria-controls="heart" role="tab" data-toggle="tab"><img width="20px" height="20px" src="/src/icons/heart.png"></a></li>
@@ -20,55 +19,47 @@
 		<!-- Tab panes -->
 		<div class="tab-content">
 			<div role="tabpanel" class="tab-pane active" id="home">
-				<section class="new-post">
-					<form action="{{ route('post.create') }}" method="post">
-						<div class="form-group">
-							<textarea style="border-radius: 0px;" class="form-control" name="body" id="new-post" rows="3" placeholder="Your Post"></textarea>
-						</div>
-						<button type="submit" class="btn btn-danger">Create Post</button>
-						<input type="hidden" name="_token" value="{{ Session::token() }}">
-					</form>
-				</section>
-
 				<section class="posts" id="posts">
 					<header><h3>What other people say ...</h3></header>
 					@foreach($posts as $post)
-						<article style="padding-bottom: 5px;" class="panel panel-danger post" data-postid="{{ $post['id'] }}">
+						<article style="padding-bottom: 5px;" class="panel panel-danger post" data-postid="{{ $post->id }}">
 							<header style="padding-top: 10px;">
-								@if(file_exists(public_path() . "/uploads/" . $post['username'] . '-' .  $post['user_id'] . '.jpg') == null)
+								@if(file_exists(public_path() . "/uploads/" . $post->user->username . '-' .  $post->user->id . '.jpg') == null)
 									<img style="width: 30px; height: 30px; float: left;" class="img-responsive img-circle" src="/uploads/nobody.jpg" alt="">
 								@else
-									<img style="width: 30px; height: 30px; float: left;" class="img-responsive img-circle" src="/uploads/{{ $post['username'] . '-' . $post['user_id'] . '.jpg' }}" alt="">
+									<img style="width: 30px; height: 30px; float: left;" class="img-responsive img-circle" src="/uploads/{{ $post->user->username . '-' .  $post->user->id . '.jpg' }}" alt="">
 								@endif
 
-								<a style="padding-left: 10px; font-size: 18px; font-style: bold; font-family: sans-serif; color: #CE433F;" href="#">{{ $post['username'] }}</a>
+								<a style="padding-left: 10px; font-size: 18px; font-style: bold; font-family: sans-serif; color: #CE433F;" href="{{ route('profile', ['username' => $post->user->username]) }}"> {{ $post->user->username }} </a>
 							</header>
+							@if(file_exists(public_path() . "/posts/" . $post->image))
+								<img class="img-responsive" src="/posts/{{ $post->image }}" alt="">
+							@endif
 							<p>{{ $post['body'] }}</p>
 							<div class="info">
-
-								<p class="like_count">{{$post['like_count']}} Like</p>
-								Posted by {{$post['username']}} on {{$post['created_at']}}
+								<p class="like_count">{{ $post->like_count }} Like</p>
+								Posted by {{ $post->user->username }} on {{ $post->created_at }}
 							</div>
 
 							<div class="interaction">
 								<a style="color: #CE433F" class="like" role="button">
-									{{ ($post['is_liked']) ? 'Unlike' : 'Like' }}
+									{{ ($post->is_liked) ? 'Unlike' : 'Like' }}
 								</a>
-								@if(auth()->user()->id == $post['user_id'])
+								@if(auth()->user()->id == $post->user_id)
 									<a style="padding: 10px;" class="edit" href="#"><img width="15px" height="15px" src="/src/icons/edit.png"></a>
 
-									<a href="{{ route('post.delete', ['post_id' => $post['id']]) }}"><img width="15px" height="15px" src="/src/icons/cancel.png"></a>
+									<a href="{{ route('post.delete', ['post_id' => $post->id]) }}"><img width="15px" height="15px" src="/src/icons/cancel.png"></a>
 								@endif
 
 								<form style="padding-top: 10px;" action="{{ route('comment.create') }}" method="post">
-									<input type="hidden" name="postId" value="{{ $post['id'] }}">
+									<input type="hidden" name="postId" value="{{ $post->id }}">
 									<input type="hidden" name="_token" value="{{ csrf_token() }}" />
 									<input class="comment form-control" style="padding-left: 5px; width: 337px;" type="text" name="comment_body" id="comment_body" placeholder="Post comment">
 								</form>
 							</div>
 
-							@foreach($comments as $comment)
-								<p>{{ $comment['comment_body'] }}</p>
+							@foreach($post->comments as $comment)
+									<p><a href="#profile">{{ $post->user->username  }}</a> {{$comment['comment_body'] }}</p>
 							@endforeach
 						</article>
 					@endforeach
@@ -97,31 +88,21 @@
 					</div><!-- /.modal-dialog -->
 				</div><!-- /.modal -->
 			</div>
-			<div role="tabpanel" class="tab-pane" id="profile">
-				<div class="text-center">
-					<h2></h2>
-					<p>
-						@if(file_exists(public_path() . "/uploads/" . auth()->user()->username . '-' .  auth()->user()->id . '.jpg') == null)
-							<img style="width: 300px; height: 300px;" class="img-responsive img-thumbnail img-circle" src="/uploads/nobody.jpg" alt="">
-						@else
-							<img style="width: 300px; height: 300px;" class="img-responsive img-thumbnail img-circle" src="/uploads/{{ auth()->user()->username . '-' . auth()->user()->id . '.jpg' }}" alt="">
-						@endif
-					</p>
-					<h1>{{ auth()->user()->full_name }}</h1>
-					<h4>{{ auth()->user()->birth_date }}</h4>
-					<h4><a style="color: #CE433F;" href="{{ auth()->user()->site }}"> {{ auth()->user()->site }} </a></h4>
-					<h4>{{ auth()->user()->bio }}</h4>
-				</div>
-			</div>
 
 			<div role="tabpanel" class="tab-pane" id="uploads">
-				<label class="control-label">Select File</label>
-				<input id="input-4" name="input4[]" type="file" multiple class="file-loading">
-				<script>
-					$(document).on('ready', function() {
-						$("#input-4").fileinput({showCaption: false});
-					});
-				</script>
+				<section class="new-post">
+					<form action="{{ route('post.create') }}" method="post" enctype="multipart/form-data">
+						<div class="form-group">
+							<textarea name="body" id="body" placeholder="Your Post"></textarea>
+						</div>
+						<div class="form-group">
+							<label for="image">Image (only.jpg)</label>
+							<input type="file" name="image" class="form-control" id="image">
+						</div>
+						<button type="submit" class="btn btn-danger">Create Post</button>
+						<input type="hidden" name="_token" value="{{ Session::token() }}">
+					</form>
+				</section>
 			</div>
 			<div role="tabpanel" class="tab-pane" id="messages">
 				Report + message
