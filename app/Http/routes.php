@@ -83,7 +83,7 @@ Route::group(['middleware' => ['web']], function () {
 		'as' => 'edit',
 	]);
 
-	Route::post('/like', [
+	Route::get('/like/{imageId}', [
 		'uses' => 'PostController@toggleLike',
 		'as' => 'like',
 	]);

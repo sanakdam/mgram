@@ -1,5 +1,6 @@
 /vendor
 /node_modules
+/public/posts
 /public/storage
 .phpintel/
 .idea/
