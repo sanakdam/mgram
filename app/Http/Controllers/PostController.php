@@ -58,8 +58,8 @@ class PostController extends Controller {
 		return response()->json(['new_body' => $post->body], 200);
 	}
 
-	public function toggleLike(Request $request) {
-		$post = Post::find($request->get('postId'));
+	public function toggleLike($imageId) {
+		$post = Post::find($imageId);
 
 		$action = 'Like';
 		if ($post->isLiked()) {
@@ -69,10 +69,11 @@ class PostController extends Controller {
 			$action = 'Unlike';
 		}
 
-		return json_encode([
-			'like_count' => $post->likes()->count(),
-			'action_text' => $action,
-		]);
+//		return json_encode([
+//			'like_count' => $post->likes()->count(),
+//			'action_text' => $action,
+//		]);
+		return redirect()->back();
 	}
 
 	public function postCommentPost(Request $request) {

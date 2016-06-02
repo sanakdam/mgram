@@ -34,11 +34,17 @@
 					<div class="interaction">
 						<table class="table">
 							<thead>
-								@if($post->is_liked)
-									<th><a href="{{ route('like') }}"><i class="fa fa-heart-o" aria-hidden="true"></i> Unlike</a></th>
-								@else
-									<th><a href="{{ route('like') }}"><i class="fa fa-heart" aria-hidden="true"></i> Unlike</a></th>
-								@endif
+								<th>
+									<a href="{{ route('like', ['imageId' => $post->id]) }}">
+										@if($post->isLiked())
+											<i class="fa fa-heart-o" aria-hidden="true"></i>
+											UnLike
+										@else
+											<i class="fa fa-heart" aria-hidden="true"></i>
+											Like
+										@endif
+									</a>
+								</th>
 
 								@if(auth()->user()->id == $post->user_id)
 									<th><a class="edit" href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a></th>
@@ -115,6 +121,5 @@
 	<script type="text/javascript">
 		var token = '{{ Session::token() }}';
 		var urlEdit = '{{ route('edit') }}';
-		var urlLike = '{{ route('like') }}';
 	</script>
 @endsection
