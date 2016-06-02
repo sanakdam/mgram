@@ -27,7 +27,7 @@
 					<label for="image">Image (only.jpg)</label>
 					<input type="file" name="image" class="form-control" id="image">
 				</div>
-				<button type="submit" class="btn btn-danger">Save Account</button>
+				<button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save Account</button>
 				<input type="hidden" value="{{ Session::token() }}" name="_token">
 			</form>
 	</section>

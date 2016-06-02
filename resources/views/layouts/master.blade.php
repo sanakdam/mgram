@@ -10,14 +10,22 @@
 	<!-- Optional theme -->
 	<link rel="stylesheet" href="{{ url('src/css/bootstrap-theme.min.css') }}" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
-	<link rel="stylesheet" type="text/css" href="{{ url('src/css/main.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ url('src/css/font-awesome.min.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ url('src/css/prettyPhoto.css') }}">
+
+	<style>
+		body {
+			background-color: #EAEAEA;
+		}
+		.container .row {
+			margin-top:100px;
+		}
+	</style>
 </head>
-<body style="background-color: #EAEAEA;">
+<body>
 	@include('includes.header')
 	<div class="container">
-		<div class="row" style="margin-top:70px;">
+		<div class="row">
 			<div class="panel panel-default col-xs-4 col-xs-offset-4">
 				@yield('content')
 			</div>

@@ -13,17 +13,25 @@
 
 Route::group(['middleware' => ['web']], function () {
 	Route::get('/', function () {
-		return view('index');
-	})->name('index');
+		return view('signin');
+	})->name('signin');
+
+	Route::get('/signup', function () {
+		return view('signup');
+	})->name('signup');
+
+	Route::get('/upload', function () {
+		return view('upload');
+	})->name('upload');
 
 	Route::post('/signup', [
 		'uses' => 'UserController@postSignUp',
-		'as' => 'signup',
+		'as' => 'userSignup',
 	]);
 
 	Route::post('/signin', [
 		'uses' => 'UserController@postSignIn',
-		'as' => 'signin',
+		'as' => 'userSignin',
 	]);
 
 	Route::get('/logout', [
@@ -83,6 +91,11 @@ Route::group(['middleware' => ['web']], function () {
 	Route::post('/comment', [
 		'uses' => 'PostController@postCommentPost',
 		'as' => 'comment.create',
+	]);
+
+	Route::post('/report', [
+		'uses' => 'PostController@report',
+		'as' => 'report.create'
 	]);
 
 	Route::get('profile/{username}', [

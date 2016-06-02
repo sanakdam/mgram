@@ -20,7 +20,7 @@ class PostController extends Controller {
 			$file = $request->file('image');
 			$post->image = $user->username . '-' . $file->getClientOriginalName() . '.jpg';
 			$file->move('posts', $post->image);
- 		}
+		}
 
 		$message = 'There was an error';
 		if ($request->user()->posts()->save($post)) {
@@ -30,8 +30,8 @@ class PostController extends Controller {
 	}
 
 	public function getDashboard() {
-		$posts = Post::orderBy('created_at', 'desc')->get();
-
+		$user = Auth::user();
+		$posts = Post::whereIn('user_id', $user->getDashboardPostIds())->get();
 		return view('dashboard', compact('posts'));
 	}
 
@@ -85,7 +85,15 @@ class PostController extends Controller {
 			'comment_body' => $request->get('comment_body'),
 			'user_id' => auth()->user()->id,
 		]);
+
 		return redirect()->route('dashboard');
+	}
+
+	public function report(Request $request) {
+		$user = auth()->user();
+		$report = new Report($request->except(['_token']));
+		$user->reports()->save($report);
+		return redirect()->back();
 	}
 }
 ?>
