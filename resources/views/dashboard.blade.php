@@ -25,7 +25,7 @@
 					@else
 						<p></p>
 					@endif
-					<p>{{ $post->body }}</p>
+					<p id="post-body-{{ $post->id }}">{{ $post->body }}</p>
 					<div class="info">
 						<p class="like_count">{{ $post->likes()->count() }} Like</p>
 						Posted on {{ $post->created_at }}
@@ -47,7 +47,7 @@
 								</th>
 
 								@if(auth()->user()->id == $post->user_id)
-									<th><a class="edit" href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a></th>
+									<th><a class="edit" href="#" data-id="{{ $post->id }}" data-body="{{ $post->body }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a></th>
 									<th><a href="{{ route('post.delete', ['post_id' => $post->id]) }}"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a></th>
 								@endif
 									<th><a class="report" data-id="{{ $post->id }}" href="#"><i class="fa fa-flag" aria-hidden="true"></i> Report</a></th>
